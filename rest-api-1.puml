@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+actor endpoint
+control gateway
+endpoint -> gateway : REST API request
+gateway -> gateway : Validate the request
+gateway -> nginx_Proxy : Send Request
+nginx_Proxy -> server : Send Request
+server -> database : Log Request
+database --> server : Log Successful
+server -> Application ++: REST request
+Application -> Database : Query
+Application --> server --: Response
+server --> nginx_Proxy: Response
+nginx_Proxy --> gateway: Response
+gateway -> gateway: validate timeout
+gateway --> endpoint: Response
+
+
+
+@enduml

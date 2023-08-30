@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+actor Клиент
+participant "Сервис Погода" as Weather
+participant "Геокодер" as Geocoder
+
+activate Клиент
+Клиент -> Weather: Погода в Москве
+activate Weather
+Клиент<-Weather: +22.3
+deactivate Weather
+
+alt температура > 20
+Клиент-> Geocoder:   Координаты Москвы
+activate Geocoder
+Клиент<-Geocoder: (55,45; 37,36)
+deactivate Geocoder
+else иначе
+Клиент-> Geocoder: Координаты Сочи
+activate Geocoder
+Клиент<-Geocoder: (43,35; 39,43)
+deactivate Geocoder
+end
+deactivate Клиент
+
+
+
+@enduml

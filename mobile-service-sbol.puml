@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+actor client
+participant SBOL
+participant SberSystems
+participant MobileOperator
+
+client -> SBOL ++: инициируется процесс оплаты
+
+
+SBOL -> SberSystems ++: запрос на услугу по оплате \n мобильной связи
+SberSystems -> SberSystems : Проверка валидности данных
+alt [if payment validate]
+SberSystems-> MobileOperator++:  Запрос данных пользователя
+MobileOperator -> MobileOperator: проверяется  учетная запись \n пользователя
+
+alt [if MobileOperator validate]
+MobileOperator-> SberSystems:  OK user
+SberSystems -> SberSystems : Генерируется счет
+
+SberSystems --> SBOL: Подтверждение выполнения  операции
+SBOL --> client : Доведение информации \n до пользователя
+client -> SBOL : Подтверждение оплаты
+SBOL -> SberSystems: Подтверждение оплаты
+SberSystems -> SberSystems : Обработка платежа
+SberSystems -> MobileOperator : Зачисление денег \n на номер пользователя
+MobileOperator -> MobileOperator : Обновление баланса  \n пользователя
+MobileOperator --> SberSystems : Подтверждение оплаты
+SberSystems -> SberSystems : Формирование ответа \n пользователю
+SberSystems --> SBOL : Форма с подтверждением оплаты
+SBOL --> client: Доведение до \n пользователя информации\nчто успешно \n проведена операция (Push)
+else [if MobileOperator not valide]
+MobileOperator--> SberSystems:  Не валидный номер
+SberSystems --> SBOL : Сообщение об ошибке нет \n такого счета у мобильного оператора
+SBOL --> client : Сообщение пользователю \n о некорректности данного номера
+
+
+end
+else [if payment not validate]
+SberSystems --> SBOL : Ответ о недостаточности денег
+SBOL --> client : Сообщение об ошибке не \n хватает денег
+
+
+end
+
+
+
+@enduml

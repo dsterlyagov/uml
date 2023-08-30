@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title "Sample UML"
+
+actor User as EndUser
+participant Saleforce as SFDC
+participant "Integration Layer" as ESB
+participant "Payment Gateway" as payGateway
+participant "Order System" as order
+
+group Step: Validate card
+    autonumber
+    EndUser -> SFDC: Enter the credit card autonumber
+    SFDC -> payGateway ++: Get card type with 4 Digit
+    SFDC <- payGateway: Get secure Token
+    SFDC -> SFDC : Save secure Token
+    else
+    EndUser <- payGateway --: Invalid Card Detail
+end
+group : Submit order
+    EndUser -> SFDC ++:Submit the order
+    SFDC -> payGateway: Validate the payment
+    SFDC <- payGateway: send paymentId
+    SFDC -> order --: Submit detail to other system
+end
+
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+actor client
+participant RequestHandler
+participant StockService
+participant CommandSender
+
+client -> RequestHandler ++: купить акции()
+note  left of RequestHandler
+[RequestHandler]
+запросы на покупку
+После обработки запроса
+информация стирается
+end note
+note  left of StockService
+[StockService]
+хранит текущую информацию
+об акции информация поступает
+из сторонних систем
+end note
+RequestHandler -> StockService ++: getStockInfo(command.getStockCode())
+
+StockService --> RequestHandler : Цена и количество
+RequestHandler -> CommandSender ++: checkAccount() считает доступный лимит
+CommandSender --> RequestHandler  : checkAccount() считает доступный лимит
+RequestHandler -> StockService : совершить покупку
+StockService --> RequestHandler : покупка совершена
+RequestHandler -> CommandSender : списать деньги
+CommandSender --> RequestHandler  : платеж прошел
+
+@enduml

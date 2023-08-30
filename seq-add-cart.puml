@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor Customer as user
+participant ShopView
+participant Client
+participant Server
+participant ShoppingCart
+
+user -> ShopView: select item
+user -> ShopView: click "Add Item" button
+ShopView -> Client: onAddItemClicked()
+
+Client -> ShopView: getSelectedItem()
+ShopView --> Client: Item
+
+Client -> Server: addItem(item)
+Server -> ShoppingCart: add(item)
+ShoppingCart --> Server: success
+alt success == true
+    Server --> Client: true
+    Client -> ShopView: showStatus("item added")
+else
+    Server --> Client: false
+    Client -> ShopView: showStatus("not added")
+
+
+
+@enduml

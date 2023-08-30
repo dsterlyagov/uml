@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User
+control gateway
+participant "Пользовательский сервис" as userService
+participant "Платежный сервис" as paymentService
+User -> gateway: **POST** http://127.0.0.1:8000/post
+note  right of User
+[Client-> Geteway] Make payment
+Headers
+Content-Type* <string>
+X-Correlation-id*<string>
+Query Params
+username*<strung>
+Payload
+{
+"name":"Trevor Wilson",
+"amount":{
+    "value": 10,
+    "currency": "GBP"
+}
+}
+
+end note
+gateway -> userService: **GET** http://127.0.0.1:8000/get*
+note  right of gateway
+[Client-> Geteway] Make payment
+Headers
+X-Name*<string>
+Query Params
+Payload
+end note
+
+gateway -> paymentService: **POST** http://127.0.0.1:8000/post*
+note  right of gateway
+[Gateway-> Payment Service] Send payment
+Headers
+X-Name*<string>
+Query Params
+Payload
+{
+"user_id":"3a6d6b9a-71d0-4b23-886b-b90ec0695303",
+"amount":{
+    "value": 10,
+    "currency": "GBP"
+}
+}
+end note
+
+@enduml

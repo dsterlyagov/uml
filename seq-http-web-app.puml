@@ -1,0 +1,54 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User
+participant Controller
+participant UserRepository
+participant UserProfileRepository
+database    MongoDb
+note  left of User
+HTTP Method POST
+Token Type: Credentials
+Token: Email:Password
+end note
+User  -> Controller ++: Registration Request
+Controller ->Controller : Validate token type,\n email,password \n and email already used
+alt [if all are validate]
+Controller-> UserRepository++:  Create new user
+UserRepository -> MongoDb : Save created user in DB
+UserRepository -> Controller --: Return created user
+Controller -> User : Return user id
+note  left of User
+HTTP Status: 201 Created
+User id returned in Header
+Location: /users/USER_ID, userProfiles/USER_ID
+end note
+
+else [if invalid token]
+note  left of User
+HTTP Status: 400 Bad Request
+end note
+Controller -> User : invalid request
+
+else [if invalid email]
+note  left of User
+HTTP Status: 400 Bad Request
+end note
+Controller -> User : invalid email
+
+else [if invalid password]
+note  left of User
+HTTP Status: 400 Bad Request
+end note
+Controller -> User : invalid password
+
+else [if  email already used]
+note  left of User
+HTTP Status: 409 Conflict
+end note
+Controller -> User --: user already exists
+
+end
+
+
+@enduml
