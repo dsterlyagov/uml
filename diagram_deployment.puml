@@ -1,0 +1,54 @@
+@startuml
+<style>
+    .parent {
+        BackgroundColor #FFF8E8
+    }
+</style>
+
+hide <<parent>> stereotype
+
+'Node
+skinparam NodeFontColor #181D27
+skinparam NodeBackgroundColor #FFEBB8
+skinparam NodeBorderColor #181D27
+skinparam NodeFontStyle bold
+skinparam NodeBorderThickness 2
+skinparam NodeFontSize 14
+skinparam NodeFontName Muller Regular
+skinparam NodeAttributeFontName Muller Regular
+skinparam NodeAttributeFontSize 13
+'Arrow
+skinparam ArrowColor #181D27
+skinparam ArrowThickness 2
+skinparam ArrowFontColor #181D27
+skinparam ArrowFontSize 12
+skinparam ArrowFontStyle bold
+skinparam ArrowFontName Muller Regular
+skinparam ArrowStyle bold
+'Component
+skinparam ComponentFontColor #181D27
+skinparam ComponentBackgroundColor #FFDB80
+skinparam ComponentBorderColor #181D27
+skinparam ComponentFontStyle bold
+skinparam ComponentBorderThickness 2
+skinparam ComponentFontSize 14
+skinparam ComponentFontName Muller Regular
+skinparam ComponentAttributeFontName Muller Regular
+skinparam ComponentAttributeFontSize 13
+
+left to right direction
+
+folder "77" as Server <<parent>> {
+folder "77" as DockerCompose <<parent>> {
+node "**ФП Кредитные **" as mef
+node "ФП Финальное решение " {
+component "**clt**" as collation
+component "**ath**" as athena
+}
+node "**DRF + admin (Django)**\nREST API и админ-панель" as DjangoDRF
+node "**Celery (Django)**\nВыполнение фоновых задач" as DjangoCelery
+}
+}
+mef <--> collation
+collation <--> athena
+@enduml

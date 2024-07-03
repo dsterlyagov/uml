@@ -1,0 +1,44 @@
+@startuml
+node "User Device" {
+    [MobileApp]
+}
+
+node "Web Server" {
+    [OrderController]
+}
+
+node "Application Server" {
+    [RestaurantService]
+    [PaymentGateway]
+    [DeliveryService]
+}
+
+node "Database Server" {
+    database "MainDB" {
+        [User]
+        [Order]
+        [Restaurant]
+        [Menu]
+        [MenuItem]
+        [Payment]
+        [Delivery]
+    }
+}
+
+node "Payment Gateway Server" {
+    [BankAPI]
+}
+
+node "Courier Service Server" {
+    [Courier]
+}
+
+[MobileApp] --> [OrderController] : HTTP
+[OrderController] --> [RestaurantService] : HTTP
+[OrderController] --> [PaymentGateway] : HTTP
+[OrderController] --> [DeliveryService] : HTTP
+[RestaurantService] --> [MainDB] : SQL
+[PaymentGateway] --> [BankAPI] : HTTPS
+[DeliveryService] --> [Courier] : HTTP
+
+@enduml
