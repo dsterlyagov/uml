@@ -1,0 +1,56 @@
+@startuml
+skinparam Linetype ortho
+
+
+[*] --> Стратегии : Новая заявка
+
+state Стратегии {
+    [*] --> NEW
+    NEW --> WAA : Переход в ожидание \n асинхронного ответа
+    WAA --> DIN: Дозаполнение заявки
+    DIN --> WAA
+
+
+}
+state ПДН {
+    WAA --> PTI
+
+
+}
+
+state Передача_положительного_решения {
+    PTI --> WBO: Ожидание ответа от бэкофиса
+
+    WBO --> WCL
+    WCL --> WAA
+}
+
+state Формирование_кредитного_договора {
+    WBO --> CSO
+
+    CSO --> WCL
+}
+
+state Ошибочный_статус {
+WAA --> ERR: Ошибка
+ERR --> WAA: Перезапрос <=3
+PTI --> ERR
+ERR --> PTI
+WBO --> ERR
+ERR --> WBO
+}
+
+state Финальный_статус {
+DIN --> REF
+CSO --> ACT
+WAA --> REF: Переход в отказ
+PTI --> REF
+WBO --> REF
+WCL --> REF
+CSO --> REF
+REF --> [*]
+ACT --> [*]
+}
+
+
+@enduml

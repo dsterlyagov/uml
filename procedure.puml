@@ -1,0 +1,27 @@
+@startuml
+
+!procedure $section($section_number, $section_name)
+!$section_number = $section_number+1
+autonumber "<font color=blue><b>[Шаг № '$section_number.'00] "
+==$section_number. $section_name==
+!$i = $section_number
+!endprocedure
+
+!$H = "Раздел"
+!$i = 0
+
+$section($i,$H)
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+Alice -> Bob: Happy Halloween
+
+!$H = "Разделить"
+$section($i,$H)
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: Another authentication Response
+
+$section($i,$H)
+Alice -> Bob: Вводим переменную "$ i"
+Alice <-- Bob: И лишь однажды задаём автонумерацию
+
+@enduml

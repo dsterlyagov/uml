@@ -1,0 +1,42 @@
+@startuml
+hide circle
+entity "Person" as Person {
+  + id : INT <<PK>>
+  --
+  first_name : VARCHAR(100)
+  last_name : VARCHAR(100)
+  birthdate : DATE
+  city_id : INT <<FK>>
+}
+
+entity "City" as City {
+  + id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  region : VARCHAR(100)
+  country : VARCHAR(100)
+}
+
+entity "Event" as Event {
+  + id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  description : TEXT
+  date : DATE
+  city_id : INT <<FK>>
+}
+
+entity "Person_Event" as PersonEvent {
+  + person_id : INT <<FK>>
+  + event_id : INT <<FK>>
+  --
+  attended : BOOLEAN
+  --
+  PRIMARY KEY (person_id, event_id)
+}
+
+Person }|..|| City
+Event }|..|| City
+PersonEvent }|..|| Person
+PersonEvent }|..|| Event
+@enduml
