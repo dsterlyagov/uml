@@ -1,0 +1,29 @@
+@startuml
+actor "Администратор" as Admin
+actor "Система автоотказа" as System
+
+rectangle "Настройка автоотказа" {
+    usecase "Задать параметр 'Периодичность запуска'" as UC1
+    usecase "Переключить тип расчета периодичности" as UC2
+    usecase "Задать параметр 'cronTimer'" as UC3
+}
+
+rectangle "Работа автоотказа" {
+    usecase "Запуск по cron-таймеру (старая логика)" as UC4
+    usecase "Запуск по fixedDelay (новая логика)" as UC5
+}
+
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+
+System --> UC4
+System --> UC5
+
+UC2 --> UC4 : При старой логике
+UC2 --> UC5 : При новой логике
+
+UC1 --> UC5 : Установить интервал в секундах (новая логика)
+UC3 --> UC4 : Установить периодичность с cronTimer (в днях, старая логика)
+@enduml
+
